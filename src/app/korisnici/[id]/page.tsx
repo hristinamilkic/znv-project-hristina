@@ -18,7 +18,7 @@ type MockKorisnik = {
 
 const API_URL = "https://676036786be7889dc35d2f7e.mockapi.io/korisnici";
 
-// API pozivi
+
 async function fetchKorisnik(id: string): Promise<MockKorisnik | null> {
   try {
     const response = await fetch(`${API_URL}/${id}`);
@@ -55,20 +55,20 @@ async function deleteKorisnik(id: number): Promise<boolean> {
 
 export default function UserDetailPage() {
   const [korisnik, setKorisnik] = useState<MockKorisnik | null>(null);
-  const params = useParams(); // Koristi useParams za pristup parametru ID
+  const params = useParams(); 
   const router = useRouter();
 
   useEffect(() => {
     async function loadKorisnik() {
       if (params.id) {
-        const data = await fetchKorisnik(params.id as string); // Tip kao string
+        const data = await fetchKorisnik(params.id as string); 
         setKorisnik(data);
       }
     }
     loadKorisnik();
-  }, [params.id]); // Sada koristimo params.id iz useParams()
+  }, [params.id]); 
 
-  // Funkcija za ažuriranje korisnika
+
   async function handleUpdate() {
     if (!korisnik) return;
     const name = prompt("Unesite novo ime:", korisnik.name);
@@ -77,7 +77,7 @@ export default function UserDetailPage() {
     }
   }
 
-  // Funkcija za brisanje korisnika
+ 
   async function handleDelete() {
     if (!korisnik) return;
     if (await deleteKorisnik(korisnik.id)) {
