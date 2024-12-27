@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/app/ui/card";
 import { Button } from "@/app/ui/button";
-import { useRouter, useParams } from "next/navigation"; // Dodato useParams
+import { useRouter, useParams } from "next/navigation"; 
 
 type MockKorisnik = {
   id: number;

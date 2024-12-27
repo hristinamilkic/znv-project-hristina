@@ -74,7 +74,7 @@ export default function UserPage() {
         <h1 className="text-3xl text-center font-light">Lista korisnika</h1>
         <div className="w-16 h-0.5 bg-orange-500"></div>
       </div>
-      <div className="mx-10 grid grid-cols-3 gap-5 mt-5">
+      <div className="mx-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
         {korisnici.map((korisnik) => (
           <Card
             key={korisnik.id}
@@ -103,15 +103,17 @@ export default function UserPage() {
         ))}
       </div>
 
-      <div className=" ml-28 mt-10 items-center grid grid-cols-2">
-        <h2 className="text-xl font-light mb-3">Želiš dodati korisnika?</h2>
-        <div className="flex items-center">
+      <div className="mt-10 items-center grid grid-cols-1 sm:grid-cols-2 gap-5 justify-center">
+        <h2 className="text-xl font-light mb-3 text-center sm:text-right">
+          Želiš dodati korisnika?
+        </h2>
+        <div className="flex flex-col sm:flex-row items-center sm:justify-center">
           <Input
             type="text"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="Unesite ime"
-            className="border p-2 rounded mr-3 w-1/2"
+            className="border p-2 rounded mb-3 sm:mb-0 sm:mr-3 w-full sm:w-1/2"
           />
           <Button
             variant={"outline"}
