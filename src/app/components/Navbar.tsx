@@ -10,7 +10,7 @@ export function Navbar() {
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         <a className="text-gray-50" href="/home">
           <img
-            src={`/src/app/public/logo.svg`}
+            src={`/logo.svg`}
             alt={`logo`}
             className="w-16 h-16 rounded-full mr-5"
           />
@@ -18,8 +18,15 @@ export function Navbar() {
         <div className="flex items-center space-x-4">
           <SignedOut>
             <SignInButton>
-              <Button variant="outline">Prijavi se</Button>
+              <Button className="bg-orange-500 font-semibold transition-all duration-300">
+                PRIJAVI SE
+              </Button>
             </SignInButton>
+            <a href="/korisnici">
+              <Button className="bg-orange-500 font-semibold transition-all duration-300">
+                LISTA KORISNIKA{" "}
+              </Button>
+            </a>
           </SignedOut>
           <SignedIn>
             <UserButton afterSignOutUrl="/" />

@@ -1,5 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/app/ui/card";
+import { Button } from "@/app/ui/button";
+import { useRouter, useParams } from "next/navigation"; // Dodato useParams
 
 type MockKorisnik = {
   id: number;
@@ -9,6 +18,7 @@ type MockKorisnik = {
 
 const API_URL = "https://676036786be7889dc35d2f7e.mockapi.io/korisnici";
 
+// API pozivi
 async function fetchKorisnik(id: string): Promise<MockKorisnik | null> {
   try {
     const response = await fetch(`${API_URL}/${id}`);
@@ -43,32 +53,22 @@ async function deleteKorisnik(id: number): Promise<boolean> {
   }
 }
 
-export default function UserDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function UserDetailPage() {
   const [korisnik, setKorisnik] = useState<MockKorisnik | null>(null);
-  const [id, setId] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function unwrapParams() {
-      const unwrappedParams = await params;
-      setId(unwrappedParams.id);
-    }
-    unwrapParams();
-  }, [params]);
+  const params = useParams(); // Koristi useParams za pristup parametru ID
+  const router = useRouter();
 
   useEffect(() => {
     async function loadKorisnik() {
-      if (id) {
-        const data = await fetchKorisnik(id);
+      if (params.id) {
+        const data = await fetchKorisnik(params.id as string); // Tip kao string
         setKorisnik(data);
       }
     }
     loadKorisnik();
-  }, [id]);
+  }, [params.id]); // Sada koristimo params.id iz useParams()
 
+  // Funkcija za ažuriranje korisnika
   async function handleUpdate() {
     if (!korisnik) return;
     const name = prompt("Unesite novo ime:", korisnik.name);
@@ -77,47 +77,57 @@ export default function UserDetailPage({
     }
   }
 
+  // Funkcija za brisanje korisnika
   async function handleDelete() {
     if (!korisnik) return;
     if (await deleteKorisnik(korisnik.id)) {
       alert("Korisnik je obrisan.");
       setKorisnik(null);
+      router.push("/korisnici");
     }
+  }
+  async function SviKorisnici() {
+    router.push("/korisnici");
   }
 
   if (!korisnik) {
     return <div>Korisnik nije pronađen ili je obrisan.</div>;
   }
+
   return (
-    <div className="py-5 items-center">
-      <h1 className="text-xl font-bold">Detalji korisnika</h1>
-      <div className="p-5 bg-stone-300 shadow-md rounded-lg text-gray-600">
-        <img
-          src={`https://i.pravatar.cc/150?u=${korisnik.id}`}
-          alt={`${korisnik.name}'s avatar`}
-          className="w-16 h-16 rounded-full mr-5"
-        />
-        <p>
-          <strong>Korisnik broj:</strong> {korisnik.id}
-        </p>
-        <p>
-          <strong>Ime:</strong> {korisnik.name}
-        </p>
-        <div className="mt-3">
-          <button
-            className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
-            onClick={handleUpdate}
-          >
-            Izmeni
-          </button>
-          <button
-            className="bg-red-500 text-white px-3 py-1 rounded"
-            onClick={handleDelete}
-          >
-            Obriši
-          </button>
-        </div>
-      </div>
+    <div className="py-5 flex justify-center items-center">
+      <Card className="max-w-sm w-full text-center">
+        <CardHeader>
+          <CardTitle className="text-lg font-bold">{korisnik.name}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center gap-4">
+          <img
+            src={`https://i.pravatar.cc/150?u=${korisnik.id}`}
+            alt={`${korisnik.name}'s avatar`}
+            className="w-24 h-24 rounded-full"
+          />
+          <p>
+            <strong>Korisnik broj:</strong> {korisnik.id}
+          </p>
+        </CardContent>
+        <CardFooter className="grid grid-cols-1 gap-2">
+          <div className=" flex flex-row items-center justify-center place-items-center gap-2">
+            <Button className="w-1/2" variant="outline" onClick={handleUpdate}>
+              IZMENI
+            </Button>
+            <Button
+              className="w-1/2"
+              variant="destructive"
+              onClick={handleDelete}
+            >
+              OBRIŠI
+            </Button>
+          </div>
+          <Button variant="outline" onClick={SviKorisnici}>
+            SVI KORISNICI
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
